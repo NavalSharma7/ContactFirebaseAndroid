@@ -1,8 +1,17 @@
 package com.example.contactsapplication.model;
 
-public class ContactInfo {
+
+import com.google.firebase.database.IgnoreExtraProperties;
+
+import java.io.Serializable;
+
+@IgnoreExtraProperties
+public class ContactInfo implements Serializable {
 
     String name, email, phone, imgString, path;
+
+
+    int id;
 
     public ContactInfo(String name, String email, String phone, String imgString,String path) {
         this.name = name;
@@ -10,6 +19,7 @@ public class ContactInfo {
         this.phone = phone;
         this.imgString = imgString;
         this.path = path;
+        this.id = id;
     }
 
     public String getPath() {
@@ -30,6 +40,14 @@ public class ContactInfo {
 
     public String getEmail() {
         return email;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setEmail(String email) {

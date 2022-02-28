@@ -8,13 +8,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.contactsapplication.EditContactActivity;
 import com.example.contactsapplication.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -54,17 +60,23 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
         holder.imgDeleteContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-                DatabaseReference userRef = rootRef.child(uid);
-                DatabaseReference contactsRef = userRef.child("Contacts");
-                contactsRef.child(mData.get(position).getName()).removeValue();
-                mData.remove(position);
-                notifyDataSetChanged();
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                String docId = String.format("%s",mData.get(position).getId());
+                DocumentReference contactRef = db.collection("Contacts").document(docId);
 
-                FirebaseStorage storage = FirebaseStorage.getInstance();
-                StorageReference firememesRef = storage.getReference(contact.getPath());
-                firememesRef.delete();
+                contactRef.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(Task<Void> task) {
+                        if(task.isSuccessful()){
+                            //value deleted
+                            mData.remove(position);
+                            notifyDataSetChanged();
+                        }else{
 
+
+                        }
+                    }
+                });
             }
         });
 
@@ -75,7 +87,7 @@ public class ContactListAdapter extends RecyclerView.Adapter<ContactListAdapter.
                 Intent intent = new Intent(activity, EditContactActivity.class);
                 intent.putExtra("UID", uid);
                 intent.putExtra("NAME",name);
-                intent.putExtra("CONTACT", (Parcelable) contact);
+                intent.putExtra("CONTACT", contact);
                 activity.startActivity(intent);
             }
         });
