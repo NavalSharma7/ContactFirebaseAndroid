@@ -109,7 +109,7 @@ public class AddContactActivity extends AppCompatActivity {
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             @SuppressWarnings("VisibleForTests") Uri downloadUrl = taskSnapshot.getUploadSessionUri();
                             uri = downloadUrl.toString();
-                            ContactInfo contact = new ContactInfo(edtEditName.getText().toString(), edtEditEmail.getText().toString(), edtEditPhone.getText().toString(), uri, path);
+                            ContactInfo contact = new ContactInfo(edtEditName.getText().toString(), edtEditEmail.getText().toString(), edtEditPhone.getText().toString(), uri, path,rootRef.getId());
 
                             rootRef.set(contact).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override

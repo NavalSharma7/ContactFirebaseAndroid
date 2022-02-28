@@ -11,9 +11,9 @@ public class ContactInfo implements Serializable {
     String name, email, phone, imgString, path;
 
 
-    int id;
+    String id;
 
-    public ContactInfo(String name, String email, String phone, String imgString,String path) {
+    public ContactInfo(String name, String email, String phone, String imgString,String path,String id) {
         this.name = name;
         this.email = email;
         this.phone = phone;
@@ -42,11 +42,11 @@ public class ContactInfo implements Serializable {
         return email;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
